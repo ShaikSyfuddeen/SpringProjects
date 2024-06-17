@@ -6,20 +6,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/onlinebookstore")
+@RequestMapping("/")
 public class bookController {
 
-	@GetMapping("/sayhello")
+	@GetMapping("onlinebookstore")
 	public String sayHello() {
 		return "hello";
 	}
 	
-	@GetMapping("/showBooks")
+	@GetMapping("onlinebookstore/showBooks")
 	public String showBooks() {
 		return "We don't have any books right now";
 	}
 	
-	@GetMapping("/showBooks/{bookId}")
+	@GetMapping("onlinebookstore/showBooks/{bookId}")
 	public String getBook(@PathVariable int bookId) {
 		return "Fetching the book with id: " + bookId;
 	}
