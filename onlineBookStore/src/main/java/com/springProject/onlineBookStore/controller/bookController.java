@@ -11,7 +11,7 @@ public class bookController {
 
 	@GetMapping("onlinebookstore")
 	public String sayHello() {
-		return "hello";
+		return "hello, welcome to online book store";
 	}
 	
 	@GetMapping("onlinebookstore/showBooks")
