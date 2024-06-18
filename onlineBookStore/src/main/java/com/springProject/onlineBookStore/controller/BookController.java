@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.springProject.onlineBookStore.entity.Book;
 import com.springProject.onlineBookStore.service.BookStoreService;
 
@@ -42,6 +43,20 @@ public class BookController {
 		theModel.addAttribute("book", book);
 		
 		return "book-info";
+	}
+	
+	@GetMapping("/showFormForAdd")
+	public String showFormForAdd(Model theModel) {
+		
+		Book theBook = new Book();
+		theModel.addAttribute("book", theBook);
+		return "book-form";
+	}
+	
+	@PostMapping("/saveBook")
+	public String addBook(@ModelAttribute("book") Book theBook) {
+		bookStoreService.save(theBook);
+		return "redirect:/books-list";
 	}
 	
 }
