@@ -27,6 +27,9 @@ public class Book {
 	
 	@Column(name="price")
 	private int price;
+	
+	@Column(name="copies_left")
+	private int copiesLeft;
 
 	public Book() {
 	}
@@ -78,10 +81,18 @@ public class Book {
 		this.price = price;
 	}
 
+	public int getCopiesLeft() {
+		return copiesLeft;
+	}
+
+	public void setCopiesLeft(int copiesLeft) {
+		this.copiesLeft = copiesLeft;
+	}
+
 	@Override
 	public String toString() {
 		return "Book [id=" + id + ", title=" + title + ", description=" + description + ", author=" + author
-				+ ", price=" + price + "]";
+				+ ", price=" + price + ", copiesLeft=" + copiesLeft + "]";
 	}
 	
 }
