@@ -12,5 +12,9 @@ public interface BookStoreService {
 	
 	public void save(Book theBook);
 	
+	public void update(Book theBook);
+	
 	public void deleteById(int theId);
+	
+	public int deleteAll();
 }
