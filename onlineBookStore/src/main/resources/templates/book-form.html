@@ -11,10 +11,19 @@
 </head>
 <body>
 	<div class="container">
-		<h3>Books Directory</h3>
-		<hr>
+		<!--Navigation bar-->
+		<div id="nav-placeholder">
 		
-		<p class="h4 mb-4"> Add Book</p>
+		</div>
+		<script src="//code.jquery.com/jquery.min.js"></script>
+		<script>
+			$.get("nav.html", function (data) {
+				$("#nav-placeholder").replaceWith(data);
+			});
+		</script>
+		<hr>
+		<h3>Add Book</h3>
+		<hr>
 		
 		<form action="#" th:action="@{(${book.id}? '/onlinebookstore/updateBook' : '/onlinebookstore/saveBook')}" th:object="${book}" method="POST">
 	    <!-- Add hidden form field to handle the update -->
@@ -27,8 +36,6 @@
 		
 		<button type="submit">Submit</button>
 		</form>
-		<hr>
-		<a th:href="@{/onlinebookstore/booksList}">Back to Books List</a>
 	</div>
 </body>
 </html>

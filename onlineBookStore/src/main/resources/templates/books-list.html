@@ -11,12 +11,20 @@
 </head>
 <body>
 	<div class="container">
+		
+		<!--Navigation bar-->
+		<div id="nav-placeholder">
+		
+		</div>
+		<script src="//code.jquery.com/jquery.min.js"></script>
+		<script>
+			$.get("nav.html", function (data) {
+				$("#nav-placeholder").replaceWith(data);
+			});
+		</script>
+		<hr>			
 		<h3>Books Directory</h3>
 		<hr>
-		<!--  Add a button -->
-		<a th:href="@{/onlinebookstore/showFormForAdd}" class="btn btn-primary btn-sm mb-3">
-			Add Book
-		</a>
 		<table class="table table-bordered table-striped">
 			<thead class="table-dark">
 				<tr>

@@ -33,6 +33,11 @@ public class BookController {
 		return "/books-list";
 	}
 
+	@GetMapping("/nav.html")
+	public String getNavBar() {
+		return "/nav";
+	}
+	
 	@GetMapping("/bookList/{bookId}")
 	public String getBookById(@PathVariable int bookId, Model theModel) {
 
