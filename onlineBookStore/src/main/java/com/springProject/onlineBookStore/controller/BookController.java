@@ -38,8 +38,8 @@ public class BookController {
 		return "/nav";
 	}
 	
-	@GetMapping("/bookList/{bookId}")
-	public String getBookById(@PathVariable int bookId, Model theModel) {
+	@GetMapping("/bookDetails")
+	public String getBookById(@RequestParam("bookId") int bookId, Model theModel) {
 
 		Book book = bookStoreService.find(bookId);
 		theModel.addAttribute("book", book);

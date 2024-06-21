@@ -12,15 +12,7 @@
 <body>
 	<div class="container">
 		<!--Navigation bar-->
-		<div id="nav-placeholder">
-		
-		</div>
-		<script src="//code.jquery.com/jquery.min.js"></script>
-		<script>
-			$.get("nav.html", function (data) {
-				$("#nav-placeholder").replaceWith(data);
-			});
-		</script>
+		<div id="nav-placeholder"></div>
 		<hr>
 		<h3>Add Book</h3>
 		<hr>
@@ -38,4 +30,10 @@
 		</form>
 	</div>
 </body>
+<script src="//code.jquery.com/jquery.min.js"></script>
+<script>
+	$.get("nav.html", function (data) {
+		$("#nav-placeholder").replaceWith(data);
+	});
+</script>
 </html>
