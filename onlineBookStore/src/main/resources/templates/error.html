@@ -9,22 +9,13 @@
 </head>
 
 <body>
-	<div class="container" th:object="${book}" align="center">
-
-		<!--Navigation bar-->
-		<div id="nav-placeholder"></div>
-		<hr>
-		<div class="card" style="width: 28rem;">
-		  <img class="card-img-top" src="..." th:alt="Card image cap">
-		  <hr>
-		  <div class="card-body">
-		    <h5 class="card-title" th:text="*{title}"></h5>
-		    <p class="card-text" th:text="*{author}"></p>
-			<p class="card-text" th:text="*{description}"></p>
-			<p class="card-text" th:text="*{price}"></p>
-		    <a href="#" class="btn btn-primary">Go somewhere</a>
-		  </div>
-		</div>
+	<!--Navigation bar-->
+	<div id="nav-placeholder"></div>
+	<div id="page-body" style="text-align: center;">
+		<h1 th:text="${errorCode}"></h1>
+		<h3 th:text="${errorMessage}"></h3>
+		<h3>Something went wrong! </h3>
+		<h3>Our Engineers are on it</h3>
 	</div>
 </body>
 <script src="//code.jquery.com/jquery.min.js"></script>
@@ -33,5 +24,4 @@
 		$("#nav-placeholder").replaceWith(data);
 	});
 </script>
-
 </html>
