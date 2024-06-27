@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>My Todo List</title>
-	</head>
-	<body>
-		<h1>Login Success</h1>
-		<p>Your Todo List will be here</p>
-	</body>
+
+<head>
+	<title>My Todo List</title>
+</head>
+
+<body>
+		<h1 th:text="${loginStatus} ? 'Login Success' : 'Login Failed'"></h1>
+		<p th:text="${loginStatus} ? 'Your Todo List will be here' : 'Please retry log in with correct username, password'"></p>
+</body>
+
 </html>

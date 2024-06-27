@@ -26,7 +26,7 @@ public class ToDoController {
 	public String showFormToRegisterUser(Model theModel) {
 		TodoUser theTodoUser = new TodoUser();
 		theModel.addAttribute("todoUser", theTodoUser);
-		return "/sign-up";
+		return "security/sign-up";
 	}
 	
 	@PostMapping("/register-user")
@@ -43,8 +43,9 @@ public class ToDoController {
 	}
 	
 	@PostMapping("/validate-user")
-	public String validateUser(@ModelAttribute("todoUser") TodoUser theTodoUser) {
-		todoUserService.validateUser(theTodoUser);
+	public String validateUser(@ModelAttribute("todoUser") TodoUser theTodoUser, Model theModel) {
+		boolean loginStatus = todoUserService.validateUser(theTodoUser);
+		theModel.addAttribute("loginStatus", loginStatus);
 		return "MyTodoList";
 	}
 	

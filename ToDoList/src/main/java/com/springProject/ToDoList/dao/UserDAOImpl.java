@@ -24,7 +24,8 @@ public class UserDAOImpl implements UserDAO{
 	@Override
 	@Transactional
 	public void addUser(TodoUser theUser) {
-		if(theUser!=null && findUser(theUser.getUsername()) == null) {
+		List<TodoUser> resultList = findUser(theUser.getUsername());
+		if(theUser!=null && (resultList == null || resultList.isEmpty())) {
 			theEntityManager.persist(theUser);
 		}
 	}
@@ -49,7 +50,7 @@ public class UserDAOImpl implements UserDAO{
 		}
 		
 		//create query
-		TypedQuery<TodoUser> theQuery = theEntityManager.createQuery("FROM TodoUser WHERE username=:username AND password:=password", TodoUser.class);
+		TypedQuery<TodoUser> theQuery = theEntityManager.createQuery("FROM TodoUser WHERE username=:username AND password=:password", TodoUser.class);
 		
 		//set query parameters
 		theQuery.setParameter("username", username);
@@ -58,7 +59,7 @@ public class UserDAOImpl implements UserDAO{
 		//fetch query result
 		List<TodoUser> tempUser = theQuery.getResultList();
 		
-		return tempUser!=null;
+		return tempUser!=null && !tempUser.isEmpty();
 	}
 
 }
