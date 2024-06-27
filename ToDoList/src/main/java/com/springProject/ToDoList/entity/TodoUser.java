@@ -1,10 +1,14 @@
 package com.springProject.ToDoList.entity;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,6 +25,10 @@ public class TodoUser {
 	
 	@Column(name="password")
 	private String password;
+	
+	@OneToMany(mappedBy = "todoUser", cascade = {CascadeType.DETACH,CascadeType.MERGE,
+			CascadeType.PERSIST, CascadeType.REFRESH})
+	private List<Task> todoList;
 
 	public TodoUser() {
 		
