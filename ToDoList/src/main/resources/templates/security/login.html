@@ -9,14 +9,23 @@
 </head>
 
 <body>
-	
-	<form action="#" th:action="@{/validate-user}" th:object="${todoUser}" method="post">
-		<span>Username : </span><input type="text" th:field="*{username}"/>
-		<br>
-		<span>Password : </span><input type="password" th:field="*{password}"/>
-		<br>
-		<button type="submit">Submit</button>
-	</form>
+	<div class="container">
+		<!--Navigation bar-->
+		<div id="nav-placeholder"></div>
+		<hr>
+		<h3>Log in</h3>
+		<hr>
+		<form action="#" th:action="@{/validate-user}" th:object="${todoUser}" method="post">
+			<input type="text" th:field="*{username}" class="form-control mb-4 w-25" placeholder="Username" required />
+			<input type="password" th:field="*{password}" class="form-control mb-4 w-25" placeholder="Password" required />
+			<button type="submit">Submit</button>
+		</form>
+	</div>
 </body>
-
+<script src="//code.jquery.com/jquery.min.js"></script>
+<script>
+	$.get("/nav", function (data) {
+		$("#nav-placeholder").replaceWith(data);
+	});
+</script>
 </html>

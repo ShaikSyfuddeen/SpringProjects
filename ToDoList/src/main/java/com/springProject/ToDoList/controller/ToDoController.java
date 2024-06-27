@@ -21,6 +21,11 @@ public class ToDoController {
 	public ToDoController(ToDoUserService todoUserService) {
 		this.todoUserService = todoUserService;
 	}
+	
+	@GetMapping("/nav")
+	public String getNavBar() {
+		return "nav";
+	}
 
 	@GetMapping("/createUser")
 	public String showFormToRegisterUser(Model theModel) {
