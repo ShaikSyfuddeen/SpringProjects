@@ -26,9 +26,12 @@ public class Users {
 	@Column(name="active")
 	private int active;
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL)
 	private List<Task> tasks;
+	
+	public Users() {
+		
+	}
 
 	public Users(String userId, String password, int active) {
 		this.userId = userId;

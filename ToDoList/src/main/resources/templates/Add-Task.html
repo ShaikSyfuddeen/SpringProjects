@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Add Task</title>
+</head>
+<body>
+	<div class="container">
+		<p class="h4 mb-4">Add Task</p>
+		<form action="#" th:action="@{/TodoApp/Add-Task}" th:object="${user}" method="POST">
+			<input type="hidden" th:field="*{userId}">
+			<input type="hidden" th:field="*{password}">
+			<input type="hidden" th:field="*{active}">
+			<input type="hidden" th:field="${task.taskId}">
+			<input type="text" th:field="${task.taskName}" class="form-control mb-4 w-25" placeholder="Task name" required>
+			<input type="text" th:field="${task.taskDescription}" class="form-control mb-4 w-25" placeholder="Task Description">
+			<input type="text" th:field="${task.taskStatus}" class="form-control mb-4 w-25" placeholder="Task Status" required>
+			<button type="submit">Submit</button>
+		</form>
+		<a th:href="@{/}">Back to Home</a>
+	</div>
+</body>
+</html>

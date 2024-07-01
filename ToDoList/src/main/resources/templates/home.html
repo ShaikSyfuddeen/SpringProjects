@@ -16,9 +16,11 @@
 	</p>
 	<hr>
 	
+	<!-- Show Add-task page-->
+	<a href="#" th:href="@{/TodoApp/Add-Task(userId=${#authentication.name})}" class="btn btn-info btn-sm">Add task</a>
 	<!--  Add a logout button -->
 	<form action="#" th:action="@{/logout}" method="POST">
-		<button type="submit" value="Logout">Logout</button>
+		<button type="submit" value="Logout" class="btn btn-info btn-sm">Logout</button>
 	</form>
 </body>
 </html>
