@@ -1,19 +1,14 @@
 package com.springProject.ToDoList.entity;
 
-import java.sql.Date;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="todo_list")
+@Table(name="task")
 public class Task {
 	
 	@Id
@@ -24,25 +19,28 @@ public class Task {
 	@Column(name="task_name")
 	private String taskName;
 	
-	@Column(name="task_deadline")
-	private Date taskDeadline;
+	@Column(name="task_description")
+	private String taskDescription;
 	
-	@Column(name="todo_status")
+	@Column(name="task_status")
 	private String taskStatus;
-	
-	@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,
-			CascadeType.PERSIST, CascadeType.REFRESH})
-	@JoinColumn(name="user_id")
-	private TodoUser todoUser;
 	
 	public Task() {
 		
 	}
-
-	public Task(String taskName, Date taskDeadline, String taskStatus) {
+	
+	public Task(String taskName, String taskDescription, String taskStatus) {
 		this.taskName = taskName;
-		this.taskDeadline = taskDeadline;
+		this.taskDescription = taskDescription;
 		this.taskStatus = taskStatus;
+	}
+
+	public int getTaskId() {
+		return taskId;
+	}
+
+	public void setTaskId(int taskId) {
+		this.taskId = taskId;
 	}
 
 	public String getTaskName() {
@@ -53,12 +51,12 @@ public class Task {
 		this.taskName = taskName;
 	}
 
-	public Date getTaskDeadline() {
-		return taskDeadline;
+	public String getTaskDescription() {
+		return taskDescription;
 	}
 
-	public void setTaskDeadline(Date taskDeadline) {
-		this.taskDeadline = taskDeadline;
+	public void setTaskDescription(String taskDescription) {
+		this.taskDescription = taskDescription;
 	}
 
 	public String getTaskStatus() {
@@ -69,12 +67,10 @@ public class Task {
 		this.taskStatus = taskStatus;
 	}
 
-	public TodoUser getTodoUser() {
-		return todoUser;
+	@Override
+	public String toString() {
+		return "Task [taskId=" + taskId + ", taskName=" + taskName + ", taskDescription=" + taskDescription
+				+ ", taskStatus=" + taskStatus + "]";
 	}
-
-	public void setTodoUser(TodoUser todoUser) {
-		this.todoUser = todoUser;
-	}
-
+	
 }

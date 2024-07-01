@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Todo List</title>
+</head>
+<body>
+	<h2>Your Todo List</h2>
+	<hr>
+	
+	<!-- display username and role -->
+	<p>
+		User: <span sec:authentication="principal.username"></span>
+		<br>
+	</p>
+	<hr>
+	
+	<!--  Add a logout button -->
+	<form action="#" th:action="@{/logout}" method="POST">
+		<button type="submit" value="Logout">Logout</button>
+	</form>
+</body>
+</html>
