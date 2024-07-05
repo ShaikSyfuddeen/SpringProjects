@@ -1,8 +1,5 @@
 package com.springboot.blogapp.payload;
 
-import lombok.Data;
-
-
 public class PostDTO {
 
 	private long id;
