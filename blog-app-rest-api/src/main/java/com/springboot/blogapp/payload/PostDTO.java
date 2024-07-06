@@ -1,5 +1,7 @@
 package com.springboot.blogapp.payload;
 
+import java.util.Set;
+
 public class PostDTO {
 
 	private long id;
@@ -9,6 +11,8 @@ public class PostDTO {
 	private String description;
 	
 	private String content;
+	
+	private Set<CommentDTO> comments;
 
 	public long getId() {
 		return id;
@@ -41,5 +45,13 @@ public class PostDTO {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	
+
+	public Set<CommentDTO> getComments() {
+		return comments;
+	}
+
+	public void setComments(Set<CommentDTO> comments) {
+		this.comments = comments;
+	}
+
 }
