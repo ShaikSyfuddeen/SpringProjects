@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springboot.blogapp.payload.CommentDTO;
 import com.springboot.blogapp.service.CommentService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/")
 public class CommentController {
@@ -27,7 +29,7 @@ public class CommentController {
 	}
 	
 	@PostMapping("/posts/{postId}/comments")
-	public ResponseEntity<CommentDTO> createComment(@PathVariable("postId") long postId, @RequestBody CommentDTO commentDTO){
+	public ResponseEntity<CommentDTO> createComment(@PathVariable("postId") long postId, @Valid @RequestBody CommentDTO commentDTO){
 		return new ResponseEntity<>(commentService.createComment(postId, commentDTO), HttpStatus.CREATED);
 	}
 	
@@ -44,7 +46,7 @@ public class CommentController {
 	}
 	
 	@PutMapping("/posts/{postId}/comments/{commentId}")
-	public ResponseEntity<CommentDTO> updateComment(@PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId, @RequestBody CommentDTO commentDTO){
+	public ResponseEntity<CommentDTO> updateComment(@PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId, @Valid @RequestBody CommentDTO commentDTO){
 		CommentDTO updatedCommentDTO = commentService.updateComment(postId, commentId, commentDTO);
 		return new ResponseEntity<>(updatedCommentDTO, HttpStatus.OK);
 	}
