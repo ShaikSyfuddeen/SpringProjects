@@ -1,5 +1,7 @@
 package com.springboot.blogapp.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springboot.blogapp.entity.Post;
 import com.springboot.blogapp.payload.PostDTO;
 import com.springboot.blogapp.payload.PostResponse;
 import com.springboot.blogapp.service.PostService;
@@ -69,5 +72,11 @@ public class PostController {
 		postService.deletePostById(id);
 		
 		return new ResponseEntity<>("Post entity deleted successfully.", HttpStatus.OK);
+	}
+	
+	// get posts by category REST API
+	@GetMapping("/category/{categoryId}")
+	public ResponseEntity<List<PostDTO>> getPostsByCategory(@PathVariable("categoryId") Long categoryId){
+		return new ResponseEntity<List<PostDTO>>(postService.getPostsByCategory(categoryId), HttpStatus.OK);
 	}
 }
