@@ -4,11 +4,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.springProject.ToDoList.entity.TodoItem;
 import com.springProject.ToDoList.exception.ResourceNotFoundException;
 import com.springProject.ToDoList.payload.TodoItemDto;
+import com.springProject.ToDoList.payload.TodoItemResponse;
 import com.springProject.ToDoList.repository.TodoItemRepository;
 import com.springProject.ToDoList.service.TodoItemService;
 
@@ -31,13 +36,28 @@ public class TodoItemServiceImpl implements TodoItemService{
 	}
 
 	@Override
-	public List<TodoItemDto> getAllTasks() {
+	public TodoItemResponse getAllTasks(int pageNo, int pageSize, String sortBy, String sortDir) {
 		
-		List<TodoItem> tasks = todoItemRepository.findAll();
+		Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 		
-		List<TodoItemDto> tasksDto = tasks.stream().map(task -> mapper.map(task, TodoItemDto.class)).collect(Collectors.toList());
+		// create Pageable instance
+		Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 		
-		return tasksDto;
+		Page<TodoItem> taskList = todoItemRepository.findAll(pageable);
+		
+		List<TodoItem> tasks = taskList.getContent();
+		
+		List<TodoItemDto> content = tasks.stream().map(task -> mapper.map(task, TodoItemDto.class)).collect(Collectors.toList());
+		
+		TodoItemResponse itemResponse = new TodoItemResponse();
+		itemResponse.setContent(content);
+		itemResponse.setPageNo(taskList.getNumber());
+		itemResponse.setPageSize(taskList.getSize());
+		itemResponse.setTotalElements(taskList.getTotalElements());
+		itemResponse.setTotalPages(taskList.getTotalPages());
+		itemResponse.setLast(taskList.isLast());
+		
+		return itemResponse;
 	}
 
 	@Override
