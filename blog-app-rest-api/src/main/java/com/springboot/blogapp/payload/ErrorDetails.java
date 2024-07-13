@@ -2,9 +2,6 @@ package com.springboot.blogapp.payload;
 
 import java.util.Date;
 
-import lombok.AllArgsConstructor;
-
-@AllArgsConstructor
 public class ErrorDetails {
 	
 	private Date timestamp;

@@ -17,6 +17,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.springboot.blogapp.payload.ErrorDetails;
+import com.springboot.blogapp.exception.ResourceNotFoundException;
+import com.springboot.blogapp.exception.BlogAPIException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
