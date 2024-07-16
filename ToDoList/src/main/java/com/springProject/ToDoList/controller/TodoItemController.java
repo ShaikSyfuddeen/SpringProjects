@@ -1,10 +1,10 @@
 package com.springProject.ToDoList.controller;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springProject.ToDoList.payload.TodoItemDto;
 import com.springProject.ToDoList.payload.TodoItemResponse;
+import com.springProject.ToDoList.security.JwtTokenProvider;
 import com.springProject.ToDoList.service.TodoItemService;
 import com.springProject.ToDoList.utils.AppConstants;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -27,42 +29,68 @@ import jakarta.validation.Valid;
 public class TodoItemController {
 	
 	private TodoItemService todoItemService;
+	private JwtTokenProvider jwtTokenProvider;
 	
-	public TodoItemController(TodoItemService todoItemService) {
+	public TodoItemController(TodoItemService todoItemService, JwtTokenProvider jwtTokenProvider) {
 		this.todoItemService = todoItemService;
+		this.jwtTokenProvider = jwtTokenProvider;
 	}
 
-	@PreAuthorize("#username == authentication.principal.username")
 	@PostMapping("/add-task")
-	public ResponseEntity<TodoItemDto> addTask(@Valid @RequestBody TodoItemDto todoItemDto) {
+	public ResponseEntity<TodoItemDto> addTask(HttpServletRequest request, @Valid @RequestBody TodoItemDto todoItemDto) {
 		
-		return new ResponseEntity<TodoItemDto>(todoItemService.addTask(todoItemDto), HttpStatus.CREATED);
+		String username = getUsernameFromHttpServletRequest(request);
+		return new ResponseEntity<TodoItemDto>(todoItemService.addTask(username, todoItemDto), HttpStatus.CREATED);
 	}
 	
 	@GetMapping({"/tasks", ""})
 	public TodoItemResponse getAllTasks(
+			HttpServletRequest request,
 			@RequestParam(value="pageNo", defaultValue=AppConstants.DEFAULT_PAGE_NO, required=false) int pageNo,
 			@RequestParam(value="pageSize", defaultValue=AppConstants.DEFAULT_PAGE_SIZE, required=false) int pageSize,
 			@RequestParam(value="sortBy", defaultValue=AppConstants.DEFAULT_SORT_BY, required=false) String sortBy,
 			@RequestParam(value="sortDir", defaultValue=AppConstants.DEFAULT_SORT_DIR, required=false) String sortDir
 			){
 		
-		return todoItemService.getAllTasks(pageNo, pageSize, sortBy, sortDir);
+		String username = getUsernameFromHttpServletRequest(request);
+		return todoItemService.getAllTasks(username, pageNo, pageSize, sortBy, sortDir);
 	}
 	
 	@GetMapping("/tasks/{id}")
-	public ResponseEntity<TodoItemDto> getTaskById(@PathVariable("id") Long id){
-		return ResponseEntity.ok(todoItemService.getTaskById(id));
+	public ResponseEntity<TodoItemDto> getTaskById(HttpServletRequest request, @PathVariable("id") Long id){
+		
+		String username = getUsernameFromHttpServletRequest(request);
+		return ResponseEntity.ok(todoItemService.getTaskById(username, id));
 	}
 	
 	@PutMapping("/tasks/{id}")
-	public ResponseEntity<TodoItemDto> updateTask(@Valid @RequestBody TodoItemDto todoItemDto){
-		return ResponseEntity.ok(todoItemService.updateTask(todoItemDto));
+	public ResponseEntity<TodoItemDto> updateTask(HttpServletRequest request, @Valid @RequestBody TodoItemDto todoItemDto, @PathVariable("id") Long id){
+		
+		String username = getUsernameFromHttpServletRequest(request);
+		return ResponseEntity.ok(todoItemService.updateTask(username, todoItemDto, id));
 	}
 	
 	@DeleteMapping("/tasks/{id}")
-	public ResponseEntity<String> deleteTask(@PathVariable("id") Long id){
-		todoItemService.deleteTaskById(id);
+	public ResponseEntity<String> deleteTask(HttpServletRequest request, @PathVariable("id") Long id){
+		
+		String username = getUsernameFromHttpServletRequest(request);
+		todoItemService.deleteTaskById(username, id);
 		return ResponseEntity.ok("Task with id: " + id + " deleted successfully");
+	}
+	
+	private String getUsernameFromHttpServletRequest(HttpServletRequest request) {
+		String token = getTokenFromRequest(request);
+		String username = jwtTokenProvider.getUsername(token);
+		return username;
+	}
+	
+	private String getTokenFromRequest(HttpServletRequest request) {
+
+		String bearerToken = request.getHeader("Authorization");
+
+		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+			return bearerToken.substring(7);
+		}
+		return null;
 	}
 }

@@ -1,5 +1,6 @@
 package com.springProject.ToDoList.service;
 
+import com.springProject.ToDoList.entity.User;
 import com.springProject.ToDoList.payload.LoginDTO;
 import com.springProject.ToDoList.payload.RegisterDTO;
 

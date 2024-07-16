@@ -11,39 +11,49 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.springProject.ToDoList.entity.TodoItem;
+import com.springProject.ToDoList.entity.User;
 import com.springProject.ToDoList.exception.ResourceNotFoundException;
 import com.springProject.ToDoList.payload.TodoItemDto;
 import com.springProject.ToDoList.payload.TodoItemResponse;
 import com.springProject.ToDoList.repository.TodoItemRepository;
+import com.springProject.ToDoList.repository.UserRepository;
 import com.springProject.ToDoList.service.TodoItemService;
 
 @Service
 public class TodoItemServiceImpl implements TodoItemService{
 
 	private TodoItemRepository todoItemRepository;
+	private UserRepository userRepository;
 	private ModelMapper mapper;
 	
-	public TodoItemServiceImpl(TodoItemRepository todoItemRepository, ModelMapper modelMapper) {
+	public TodoItemServiceImpl(TodoItemRepository todoItemRepository, UserRepository userRepository, ModelMapper modelMapper) {
 		this.todoItemRepository = todoItemRepository;
 		this.mapper = modelMapper;
+		this.userRepository = userRepository;
 	}
 	
-	public TodoItemDto addTask(TodoItemDto todoItemDto) {
+	public TodoItemDto addTask(String username, TodoItemDto todoItemDto) {
 		
 		TodoItem todoItem = mapper.map(todoItemDto, TodoItem.class);
+		
+		User user = userRepository.findByUsernameOrEmail(username, username).orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+		
+		todoItem.setUser(user);
 		TodoItem newTask = todoItemRepository.save(todoItem);
 		return mapper.map(newTask, TodoItemDto.class);
 	}
 
 	@Override
-	public TodoItemResponse getAllTasks(int pageNo, int pageSize, String sortBy, String sortDir) {
+	public TodoItemResponse getAllTasks(String username, int pageNo, int pageSize, String sortBy, String sortDir) {
 		
 		Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 		
 		// create Pageable instance
 		Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 		
-		Page<TodoItem> taskList = todoItemRepository.findAll(pageable);
+		User user = userRepository.findByUsernameOrEmail(username, username).orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+		
+		Page<TodoItem> taskList = todoItemRepository.findAllByUser(user, pageable);
 		
 		List<TodoItem> tasks = taskList.getContent();
 		
@@ -61,16 +71,20 @@ public class TodoItemServiceImpl implements TodoItemService{
 	}
 
 	@Override
-	public TodoItemDto getTaskById(Long id) {
+	public TodoItemDto getTaskById(String username, Long id) {
 		
-		TodoItem item = todoItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Task", "id", id));
+		User user = userRepository.findByUsernameOrEmail(username, username).orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+		
+		TodoItem item = todoItemRepository.findByIdAndUser(id, user).orElseThrow(() -> new ResourceNotFoundException("Task", "id", id));
 		return mapper.map(item, TodoItemDto.class);
 	}
 
 	@Override
-	public TodoItemDto updateTask(TodoItemDto todoItemDto) {
+	public TodoItemDto updateTask(String username, TodoItemDto todoItemDto, Long id) {
 		
-		TodoItem item = todoItemRepository.findById(todoItemDto.getId()).orElseThrow(() -> new ResourceNotFoundException("Task", "id", todoItemDto.getId()));
+		User user = userRepository.findByUsernameOrEmail(username, username).orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+		
+		TodoItem item = todoItemRepository.findByIdAndUser(id, user).orElseThrow(() -> new ResourceNotFoundException("Task", "id", id));
 		
 		item.setName(todoItemDto.getName());
 		item.setDescription(todoItemDto.getDescription());
@@ -81,9 +95,11 @@ public class TodoItemServiceImpl implements TodoItemService{
 	}
 
 	@Override
-	public void deleteTaskById(Long id) {
+	public void deleteTaskById(String username, Long id) {
 		
-		TodoItem item = todoItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Task", "id", id));
+		User user = userRepository.findByUsernameOrEmail(username, username).orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+		
+		TodoItem item = todoItemRepository.findByIdAndUser(id, user).orElseThrow(() -> new ResourceNotFoundException("Task", "id", id));
 		
 		if(item != null) {
 			todoItemRepository.delete(item);

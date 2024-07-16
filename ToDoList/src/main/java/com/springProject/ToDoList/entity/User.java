@@ -1,5 +1,6 @@
 package com.springProject.ToDoList.entity;
 
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -12,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -42,6 +44,9 @@ public class User {
 			inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName = "id")
 			)
 	private Set<Role> roles;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<TodoItem> tasks;
 
 	public Long getId() {
 		return id;
@@ -81,6 +86,14 @@ public class User {
 
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+
+	public List<TodoItem> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(List<TodoItem> tasks) {
+		this.tasks = tasks;
 	}
 
 }
