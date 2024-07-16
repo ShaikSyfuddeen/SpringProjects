@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ public class TodoItemController {
 		this.todoItemService = todoItemService;
 	}
 
+	@PreAuthorize("#username == authentication.principal.username")
 	@PostMapping("/add-task")
 	public ResponseEntity<TodoItemDto> addTask(@Valid @RequestBody TodoItemDto todoItemDto) {
 		
