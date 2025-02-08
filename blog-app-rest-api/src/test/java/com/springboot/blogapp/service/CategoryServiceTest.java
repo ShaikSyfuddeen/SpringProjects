@@ -34,17 +34,22 @@ public class CategoryServiceTest {
 	@MockBean
 	private CategoryRepository categoryRepository;
 	
+	private Category getSampleCategory(long id) {
+		Category c = new Category(id, "Test Category-"+id, "Category-" + id + " for testing");
+		return c;
+	}
+	
 	@Test
 	public void getCategoryDTOTest() {
-		Category c = new Category(1l, "Test Category", "Category for testing");
+		Category c = getSampleCategory(1l);
 		when(categoryRepository.findById(1l)).thenReturn(Optional.of(c));
 		assertNotEquals(null, categoryService.getCategoryDTO(1l));
 	}
 	
 	@Test
 	public void getAllCategoriesTest() {
-		Category c1 = new Category(1l, "Test Category-1", "Category-1 for testing");
-		Category c2 = new Category(2l, "Test Category-2", "Category-2 for testing");
+		Category c1 = getSampleCategory(1l);
+		Category c2 = getSampleCategory(2l);
 		when(categoryRepository.findAll()).thenReturn(Stream.of(c1, c2).collect(Collectors.toList()));
 		assertEquals(2, categoryService.getAllCategories().size());
 	}
@@ -53,7 +58,7 @@ public class CategoryServiceTest {
 	public void updateCategoryTest() {
 		CategoryDTO dto = new CategoryDTO(1l, "Test Category", "Category for testing");
 		Category c = modelMapper.map(dto, Category.class);
-		Category c1 = new Category(1l, "Test Category-1", "Category-1 for testing");
+		Category c1 = getSampleCategory(1l);
 		when(categoryRepository.findById(1l)).thenReturn(Optional.of(c1));
 		when(categoryRepository.save(c1)).thenReturn(c);
 		assertNotEquals(null, categoryService.updateCategory(dto, 1l));
@@ -61,7 +66,7 @@ public class CategoryServiceTest {
 	
 	@Test
 	public void deleteCategoryTest() {
-		Category c = new Category(1l, "Test Category", "Category for testing");
+		Category c = getSampleCategory(1l);
 		when(categoryRepository.findById(1l)).thenReturn(Optional.of(c));
 		categoryService.deleteCategory(1l);
 		verify(categoryRepository, times(1)).delete(c);
