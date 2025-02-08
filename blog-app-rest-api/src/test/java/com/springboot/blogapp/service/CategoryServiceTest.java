@@ -35,13 +35,6 @@ public class CategoryServiceTest {
 	private CategoryRepository categoryRepository;
 	
 	@Test
-	public void getCategoryTest() {
-		Category c = new Category(1l, "Test Category", "Category for testing");
-		when(categoryRepository.findById(1l)).thenReturn(Optional.of(c));
-		assertEquals(c, categoryService.getCategory(1l));	
-	}
-	
-	@Test
 	public void getCategoryDTOTest() {
 		Category c = new Category(1l, "Test Category", "Category for testing");
 		when(categoryRepository.findById(1l)).thenReturn(Optional.of(c));

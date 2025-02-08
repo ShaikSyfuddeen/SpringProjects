@@ -37,13 +37,6 @@ public class CategoryServiceImpl implements CategoryService{
 								.orElseThrow(() ->new ResourceNotFoundException("Category", "id", categoryId));
 		return modelMapper.map(category, CategoryDTO.class);
 	}
-	
-	@Override
-	public Category getCategory(Long categoryId) {
-		Category category = categoryRepository.findById(categoryId)
-				.orElseThrow(() ->new ResourceNotFoundException("Category", "id", categoryId));
-		return category;
-	}
 
 	@Override
 	public List<CategoryDTO> getAllCategories() {
