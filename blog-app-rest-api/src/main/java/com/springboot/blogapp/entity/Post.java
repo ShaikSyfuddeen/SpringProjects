@@ -30,7 +30,14 @@ public class Post {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private Long id;
-	
+
+	public Post(Long id, String title, String description, String content) {
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.content = content;
+	}
+
 	@Column(name="title", nullable = false)
 	private String title;
 	
