@@ -10,8 +10,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,7 +39,16 @@ public class CategoryServiceTest {
 		Category c = new Category(id, "Test Category-"+id, "Category-" + id + " for testing");
 		return c;
 	}
-	
+
+	@Test
+	public void addCategoryTest() {
+		long id = 1l;
+		CategoryDTO dto = new CategoryDTO(id, "Test Category-"+id, "Category-" + id + " for testing");
+		Category category = modelMapper.map(dto, Category.class);
+        when(categoryRepository.save(Mockito.any(Category.class))).thenReturn(category);
+		assertNotEquals(null, categoryService.addCategory(dto));
+	}
+
 	@Test
 	public void getCategoryDTOTest() {
 		Category c = getSampleCategory(1l);
