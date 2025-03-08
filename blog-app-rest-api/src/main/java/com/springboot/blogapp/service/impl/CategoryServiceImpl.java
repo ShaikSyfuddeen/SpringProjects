@@ -3,6 +3,7 @@ package com.springboot.blogapp.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import com.springboot.blogapp.payload.CategoryDTO;
 import com.springboot.blogapp.repository.CategoryRepository;
 import com.springboot.blogapp.service.CategoryService;
 
+@Slf4j
 @Service
 public class CategoryServiceImpl implements CategoryService{
 
@@ -33,9 +35,16 @@ public class CategoryServiceImpl implements CategoryService{
 
 	@Override
 	public CategoryDTO getCategoryDTO(Long categoryId) {
-		Category category = categoryRepository.findById(categoryId)
-								.orElseThrow(() ->new ResourceNotFoundException("Category", "id", categoryId));
-		return modelMapper.map(category, CategoryDTO.class);
+		Category category = null;
+		try {
+			 category = categoryRepository.findById(categoryId)
+					.orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
+			return modelMapper.map(category, CategoryDTO.class);
+		} catch (NullPointerException npe) {
+			log.error("Null Pointer exception occured while retrieving category of id: " + categoryId + "\n" + npe.getMessage());
+			throw new NullPointerException("Null Pointer exception occured while retrieving category of id: " + categoryId);
+		}
+
 	}
 
 	@Override
@@ -46,14 +55,12 @@ public class CategoryServiceImpl implements CategoryService{
 
 	@Override
 	public CategoryDTO updateCategory(CategoryDTO categoryDTO, Long categoryId) {
-		
 		Category category = categoryRepository.findById(categoryId)
 							.orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
 		
 		category.setName(categoryDTO.getName());
 		category.setDescription(categoryDTO.getDescription());
 		category.setId(categoryId);
-		
 		Category updatedCategory = categoryRepository.save(category);
 		return modelMapper.map(updatedCategory, CategoryDTO.class);
 	}
