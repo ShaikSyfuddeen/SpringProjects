@@ -44,9 +44,8 @@ public class PostServiceImpl implements PostService{
 		Post newPost = postRepository.save(post);
 		
 		// convert entity to DTO
-		PostDTO postResponse = mapToDTO(newPost);
-		
-		return postResponse;
+
+        return mapToDTO(newPost);
 	}
 
 	@Override
@@ -78,8 +77,7 @@ public class PostServiceImpl implements PostService{
 	@Override
 	public PostDTO getPostById(long id) {
 		Post post = postRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Post", "id", id));
-		PostDTO postResponse = mapToDTO(post);
-		return postResponse;
+        return mapToDTO(post);
 	}
 	
 	@Override
@@ -111,22 +109,14 @@ public class PostServiceImpl implements PostService{
 	@Override
 	public List<PostDTO> getPostsByCategory(Long categoryId) {
 		Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
-		
 		List<Post> posts = postRepository.findByCategoryId(categoryId);
-		
-		return posts.stream().map(post -> mapToDTO(post)).collect(Collectors.toList());
+		return posts.stream().map(post -> this.mapToDTO(post)).collect(Collectors.toList());
 	}
-	
-	// convert Entity to DTO
 	private PostDTO mapToDTO(Post post) {
-		PostDTO postDTO = mapper.map(post, PostDTO.class);
-		return postDTO;
-	}
-	
-	// convert DTO to Entity
-	private Post mapToEntity(PostDTO postDTO) {
-		Post post = mapper.map(postDTO, Post.class);
-		return post;
+        return mapper.map(post, PostDTO.class);
 	}
 
+	private Post mapToEntity(PostDTO postDTO) {
+        return mapper.map(postDTO, Post.class);
+	}
 }
