@@ -1,8 +1,10 @@
 package com.springboot.blogapp.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
+import com.springboot.blogapp.exception.BlogAPIException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -54,7 +56,7 @@ public class AuthServiceTest {
 	}
 	
 	@Test
-	public void registerTest() {
+	public void registerTest_Success() {
 		RegisterDTO dto = new RegisterDTO("user1", "user1", "user1@email.com", "user1");
 		User user = mapper.map(dto, User.class);
 		when(userRepository.existsByUsername("user1")).thenReturn(false);
@@ -62,6 +64,22 @@ public class AuthServiceTest {
 		when(userRepository.save(Mockito.any())).thenReturn(user);
 		assertEquals("User registered successfully", authService.register(dto));
 	}
-	
-	
+
+	@Test
+	public void registerTest_UsernameExists() {
+		RegisterDTO dto = new RegisterDTO("user1", "user1", "user1@email.com", "user1");
+		User user = mapper.map(dto, User.class);
+		when(userRepository.existsByUsername("user1")).thenReturn(true);
+		when(userRepository.existsByEmail("user1@email.com")).thenReturn(false);
+		assertThrows(BlogAPIException.class,() -> authService.register(dto));
+	}
+
+	@Test
+	public void registerTest_EmailExists() {
+		RegisterDTO dto = new RegisterDTO("user1", "user1", "user1@email.com", "user1");
+		User user = mapper.map(dto, User.class);
+		when(userRepository.existsByUsername("user1")).thenReturn(false);
+		when(userRepository.existsByEmail("user1@email.com")).thenReturn(true);
+		assertThrows(BlogAPIException.class,() -> authService.register(dto));
+	}
 }
