@@ -61,7 +61,6 @@ public class PostControllerTest {
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
-        // Verify that authService.login was called once
         verify(postService, times(1)).createPost(dto);
     }
 
