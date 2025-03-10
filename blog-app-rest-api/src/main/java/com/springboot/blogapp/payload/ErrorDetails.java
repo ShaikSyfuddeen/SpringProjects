@@ -1,7 +1,10 @@
 package com.springboot.blogapp.payload;
 
+import lombok.Getter;
+
 import java.util.Date;
 
+@Getter
 public class ErrorDetails {
 	
 	private Date timestamp;
@@ -14,15 +17,4 @@ public class ErrorDetails {
 		this.details = details;
 	}
 
-	public Date getTimestamp() {
-		return timestamp;
-	}
-	
-	public String getMessage() {
-		return message;
-	}
-	
-	public String getDetails() {
-		return details;
-	}
 }

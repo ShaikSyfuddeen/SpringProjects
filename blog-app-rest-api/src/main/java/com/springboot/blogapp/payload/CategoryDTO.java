@@ -1,7 +1,11 @@
 package com.springboot.blogapp.payload;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
+@Getter
 @NoArgsConstructor
 public class CategoryDTO {
 
@@ -13,24 +17,6 @@ public class CategoryDTO {
 		super();
 		this.id = id;
 		this.name = name;
-		this.description = description;
-	}
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
 		this.description = description;
 	}
 
